@@ -28,3 +28,5 @@ def total_in_template(request):
         'products': Product,
     }
     return render(request, 'myapp6/total_count.html', context)
+
+#test
