@@ -15,19 +15,29 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+import os
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!dtj&m1ndsor@jmu1f0c#wf%zvnhzsgk=w#smu&lb)kmpppv8s'
+# SECRET_KEY = 'django-insecure-!dtj&m1ndsor@jmu1f0c#wf%zvnhzsgk=w#smu&lb)kmpppv8s'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 
 ALLOWED_HOSTS = [
     '192.168.1.34',
     '127.0.0.1',
+    'vatsekgblesson.pythonanywhere.com',
+]
+
+INTERNAL_IPS = [
+'127.0.0.1',
 ]
 
 
@@ -45,9 +55,12 @@ INSTALLED_APPS = [
     'myapp3',
     'myapp4',
     'myapp5',
+    'myapp6',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -85,8 +98,16 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'vatsekgblesson$default',
+        'USER': 'vatsekgblesson',
+        'PASSWORD': os.getenv('MYSQL_PASSWORD'),
+        'HOST': 'vatsekgblesson.mysql.pythonanywhere-services.com',
+        'OPTIONS': {
+            'init_command': "SET NAMES 'utf8mb4';SET sql_mode='STRICT_TRANS_TABLES'",
+            'charset': 'utf8mb4',
+        },
+
     }
 }
 
@@ -126,6 +147,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

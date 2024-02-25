@@ -19,3 +19,7 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property # данный декоратор говорит, что данный метод нужно воспринимать как свойство, а не метод
+    def total_quantity(self):
+        return sum(product.quantity for product in Product.objects.all())
